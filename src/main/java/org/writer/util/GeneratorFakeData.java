@@ -40,13 +40,12 @@ public class GeneratorFakeData {
     }
 
     private static Person generatePerson() {
-        return Person.builder()
-                .firstName(faker.name().firstName())
-                .lastName(faker.name().lastName())
-                .dayOfBirth(faker.number().numberBetween(1, 28))
-                .monthOfBirth(Months.values()[faker.number().numberBetween(0, Months.values().length - 1)])
-                .yearOfBirth(faker.number().numberBetween(1950, 2005))
-                .build();
+        Person person = new Person();
+        person.setLastName(faker.name().lastName());
+        person.setDayOfBirth(faker.number().numberBetween(1, 28));
+        person.setMonthOfBirth(Months.values()[faker.number().numberBetween(0, Months.values().length - 1)]);
+        person.setYearOfBirth(faker.number().numberBetween(1950, 2005));
+        return person;
     }
 
     /**
@@ -65,10 +64,11 @@ public class GeneratorFakeData {
     }
 
     private static Student generateStudent() {
-        return Student.builder()
-                .name(faker.name().firstName() + " " + faker.name().lastName())
-                .score(generateScores())
-                .build();
+        Student student = new Student();
+        student.setName(faker.name().firstName() + " " + faker.name().lastName());
+        student.setScore(generateScores());
+        return student;
+
     }
 
     /**
