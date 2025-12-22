@@ -1,5 +1,6 @@
 package org.writer.writer;
 
+import org.writer.exception.CsvWriterException;
 import org.writer.Writable;
 import org.writer.annotation.CSVField;
 
@@ -57,7 +58,7 @@ public class CSVWriter implements Writable {
                 writer.write(NEW_LINE);
             }
         } catch (IOException e) {
-            throw new RuntimeException("You have uncorrected path way", e);
+            throw new CsvWriterException("You have uncorrected path way", e);
         }
     }
 
@@ -105,7 +106,7 @@ public class CSVWriter implements Writable {
         return annotatedFields.stream()
                 .sorted(Comparator.comparingInt(field ->
                         field.getAnnotation(CSVField.class).order()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -121,11 +122,10 @@ public class CSVWriter implements Writable {
 
         CSVField annotation = field.getAnnotation(CSVField.class);
         String format = annotation.format();
-        if (!format.isEmpty()) {
-            if (value instanceof LocalDateTime) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-                return ((LocalDateTime) value).format(formatter);
-            }
+
+        if (!format.isEmpty() && value instanceof LocalDateTime localDateTime) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+            return localDateTime.format(formatter);
         }
 
         return value.toString();
@@ -161,7 +161,7 @@ public class CSVWriter implements Writable {
                         String formattedValue = formatFieldValue(field, value);
                         return escapeCsvValue(formattedValue);
                     } catch (IllegalAccessException e) {
-                        throw new RuntimeException("Cant generate data csv",e);
+                        throw new CsvWriterException("Cant generate data csv",e);
                     }
                 })
                 .collect(Collectors.joining(CSV_DELIMITER));

@@ -8,7 +8,6 @@ import org.writer.model.Student;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 /**
  * Генератор случайных данных
@@ -22,7 +21,9 @@ public class GeneratorFakeData {
 
     private static final Faker faker = new Faker(new Locale("ru"));
 
-    private static final Random random = new Random();
+    private GeneratorFakeData() {
+
+    }
 
     /**
      * Генерирует список объектов Person со случайными данными
@@ -79,10 +80,10 @@ public class GeneratorFakeData {
     private static List<String> generateScores() {
         List<String> scores = new ArrayList<>();
 
-        int count = 1 + random.nextInt(10);
+        int count = 1 + faker.random().nextInt(10);
 
         for (int i = 0; i < count; i++) {
-            int score = random.nextInt(101); // 0-100
+            int score = faker.random().nextInt(101);
             scores.add(String.valueOf(score));
         }
 
